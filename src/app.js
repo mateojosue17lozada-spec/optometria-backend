@@ -19,12 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 const pacienteRoutes = require('./routes/pacienteRoutes');
-// const citaRoutes = require('./routes/citaRoutes');
+const citaRoutes = require('./routes/citaRoutes');
 // const examenRoutes = require('./routes/examenRoutes');
 // const productoRoutes = require('./routes/productoRoutes');
 
 app.use('/api/pacientes', pacienteRoutes);
-// app.use('/api/citas', citaRoutes);
+app.use('/api/citas', citaRoutes);
 // app.use('/api/examenes', examenRoutes);
 // app.use('/api/productos', productoRoutes);
 
