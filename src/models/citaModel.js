@@ -1,5 +1,18 @@
 const { getConnection, sql } = require('../config/database');
 
+// Función para convertir hora en formato HH:mm o HH:mm:ss a un objeto Date válido para SQL Server
+function horaToDate(hora) {
+    if (!hora) return null;
+    const parts = hora.split(':');
+    if (parts.length < 2) return null;
+    const hh = parseInt(parts[0]) || 0;
+    const mm = parseInt(parts[1]) || 0;
+    const ss = parseInt(parts[2]) || 0;
+    // Crear fecha con año 1970-01-01 y la hora especificada
+    const d = new Date(1970, 0, 1, hh, mm, ss);
+    return d;
+}
+
 class CitaModel {
     // Obtener todas las citas con datos del paciente
     static async getAll() {
@@ -55,7 +68,7 @@ class CitaModel {
         const result = await pool.request()
             .input('paciente_id', sql.Int, data.paciente_id)
             .input('fecha', sql.Date, data.fecha)
-            .input('hora', sql.Time, data.hora)
+            .input('hora', sql.Time, horaToDate(data.hora))  // <--- CONVERSIÓN AQUÍ
             .input('motivo', sql.NVarChar, data.motivo || null)
             .input('estado', sql.VarChar(20), data.estado || 'pendiente')
             .input('observaciones', sql.NVarChar, data.observaciones || null)
@@ -75,7 +88,7 @@ class CitaModel {
             .input('id', sql.Int, id)
             .input('paciente_id', sql.Int, data.paciente_id)
             .input('fecha', sql.Date, data.fecha)
-            .input('hora', sql.Time, data.hora)
+            .input('hora', sql.Time, horaToDate(data.hora))  // <--- CONVERSIÓN AQUÍ
             .input('motivo', sql.NVarChar, data.motivo || null)
             .input('estado', sql.VarChar(20), data.estado)
             .input('observaciones', sql.NVarChar, data.observaciones || null)
